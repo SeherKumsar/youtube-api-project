@@ -6,3 +6,7 @@
 config.py
 __pycache__
 
+# Her dosyanın sonunda bir boşluk bırakın.
+# Git dosyalarınızı yüklerken bu dosyaları atlamak için kullanılır.
+
+
