@@ -55,3 +55,35 @@ def get_video_ids(youtube, playlist_id):
         
     return video_ids
 
+def get_video_comments(youtube, video_ids):
+    comment_list = []
+
+    for video_id in video_ids:
+        request = youtube.commentThreads().list(
+            part='snippet,replies', 
+            videoId=video_id, 
+            maxResults=50)
+        
+        response = request.execute()
+
+        for item in response.get('items'):
+            comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+            comment_list.append(comment)
+
+        next_page_token = response.get('nextPageToken')
+
+        while next_page_token is not None:
+            request = youtube.commentThreads().list(
+                part='snippet,replies', 
+                videoId=video_id, 
+                maxResults=50, 
+                pageToken=next_page_token)
+            response = request.execute()
+
+            for item in response.get('items'):
+                comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+                comment_list.append(comment)
+
+            next_page_token = response.get('nextPageToken')
+
+    return comment_list
